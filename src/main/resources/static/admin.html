@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - WD33 Course Registration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css?v=2">
+</head>
+
+<body>
+    <!-- Notification Bar -->
+    <div id="notification" class="notification-bar" role="alert"></div>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="admin.html" class="sidebar-logo">
+                <i class="bi bi-mortarboard-fill"></i>
+                <span>WD33 Admin</span>
+            </a>
+
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="#" id="nav-dashboard" class="nav-link active" onclick="switchTab('admin-dashboard', this)">
+                        <i class="bi bi-grid-1x2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" id="nav-courses" class="nav-link" onclick="switchTab('admin-courses', this)">
+                        <i class="bi bi-book"></i>
+                        <span>Courses</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" id="nav-students" class="nav-link" onclick="switchTab('admin-students', this)">
+                        <i class="bi bi-people"></i>
+                        <span>Students</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" id="nav-enrollments" class="nav-link" onclick="switchTab('admin-enrollments', this)">
+                        <i class="bi bi-clipboard-check"></i>
+                        <span>Enrollments</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" id="nav-materials" class="nav-link" onclick="switchTab('admin-materials', this)">
+                        <i class="bi bi-folder2-open"></i>
+                        <span>Materials</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#" class="nav-link text-danger" onclick="logout()">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header>
+                <div class="welcome-text">
+                    <h1 id="adminWelcome">Welcome, System Admin</h1>
+                    <p>Manage your courses, students, and enrollments here.</p>
+                </div>
+                <div class="header-actions">
+                    <div id="userInfo" class="user-profile text-secondary"></div>
+                    <button class="btn-outline-neon" onclick="logout()">
+                        <i class="bi bi-power"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- KPI Cards -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="glass-card kpi-card clickable-card"
+                        onclick="document.getElementById('nav-courses').click()">
+                        <div class="kpi-data">
+                            <h3 id="adminStatCourses">0</h3>
+                            <p>Total Courses</p>
+                        </div>
+                        <div class="kpi-chart">
+                            <svg class="mini-chart" viewBox="0 0 100 40" style="color: var(--accent-purple);">
+                                <path d="M0,35 Q20,5 40,25 T80,10 T100,30" stroke="currentColor"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card kpi-card clickable-card"
+                        onclick="document.getElementById('nav-students').click()">
+                        <div class="kpi-data">
+                            <h3 id="adminStatStudents">0</h3>
+                            <p>Active Students</p>
+                        </div>
+                        <div class="kpi-chart">
+                            <svg class="mini-chart" viewBox="0 0 100 40" style="color: var(--accent-cyan);">
+                                <path d="M0,30 Q15,35 30,15 T60,25 T100,5" stroke="currentColor"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card kpi-card clickable-card"
+                        onclick="document.getElementById('nav-enrollments').click()">
+                        <div class="kpi-data">
+                            <h3 id="adminStatPending">0</h3>
+                            <p>Pending Requests</p>
+                        </div>
+                        <div class="kpi-chart">
+                            <svg class="mini-chart" viewBox="0 0 100 40" style="color: var(--accent-pink);">
+                                <path d="M0,35 Q25,25 50,35 T100,10" stroke="currentColor"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div id="dashboard-content">
+                <!-- Dashboard Section (Overview) -->
+                <div id="admin-dashboard" class="dashboard-section">
+                    <div class="glass-card text-center py-5">
+                        <div class="hero-container mb-4">
+                            <img src="images/admin-hero.jpg" alt="Course Admin" class="hero-image">
+                        </div>
+                        <h2 class="text-white">System Core Online</h2>
+                        <p class="text-secondary max-width-600 mx-auto">Welcome to the WD33 Registration Nexus. All
+                            management modules are operating within normal parameters. Navigate through the sidebar to
+                            coordinate students, courses, and materials.</p>
+                        <div class="d-flex justify-content-center gap-3 mt-4">
+                            <button class="btn-outline-neon" onclick="document.getElementById('nav-courses').click()">
+                                <i class="bi bi-book me-2"></i>Manage Courses
+                            </button>
+                            <button class="btn-primary-neon" onclick="document.getElementById('nav-students').click()">
+                                <i class="bi bi-people me-2"></i>View Students
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Courses Section (Unified Management) -->
+                <div id="admin-courses" class="dashboard-section hidden">
+                    <div class="glass-card mb-4">
+                        <h5 class="mb-4"><i class="bi bi-plus-circle me-2 text-pink"></i>Add New Course</h5>
+                        <form id="addCourseForm" onsubmit="addCourse(event)" class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Course Title</label>
+                                <input type="text" id="courseTitle" class="form-control"
+                                    placeholder="e.g. Java Programming" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Schedule</label>
+                                <input type="text" id="courseSchedule" class="form-control"
+                                    placeholder="e.g. Mon/Wed 10:00 AM">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Description</label>
+                                <textarea id="courseDescription" class="form-control" rows="2"
+                                    placeholder="Enter course details..."></textarea>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Capacity</label>
+                                <input type="number" id="courseCapacity" class="form-control" value="30" required>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn-primary-neon">
+                                    <i class="bi bi-plus-lg"></i>
+                                    <span>Create Course</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Course Title</th>
+                                    <th>Schedule</th>
+                                    <th>Capacity</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminCoursesTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Other sections will be shown/hidden via JS -->
+                <div id="admin-students" class="dashboard-section hidden">
+                    <div class="table-container">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Contact Information</th>
+                                    <th>Loadout</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminStudentsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="admin-enrollments" class="dashboard-section hidden">
+                    <div class="table-container">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>Candidate</th>
+                                    <th>Target Course</th>
+                                    <th>Payment Slip</th>
+                                    <th>Timestamp</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pendingEnrollmentsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="admin-materials" class="dashboard-section hidden">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="glass-card">
+                                <h5 class="mb-4">Upload Material</h5>
+                                <form id="uploadMaterialForm" onsubmit="uploadMaterial(event)">
+                                    <div class="form-group">
+                                        <label class="form-label">Target Course</label>
+                                        <select id="materialCourseId" class="form-control" required
+                                            onchange="loadAdminCourseMaterials(this.value)">
+                                            <option value="">Choose course...</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Material Title</label>
+                                        <input type="text" id="materialTitle" class="form-control"
+                                            placeholder="e.g. Syllabus" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">File</label>
+                                        <input type="file" id="materialFile" class="form-control" required>
+                                    </div>
+                                    <button type="submit" class="btn-primary-neon w-100">
+                                        <i class="bi bi-upload"></i>
+                                        <span>Upload Material</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="glass-card">
+                                <h5 class="mb-4">Course Materials</h5>
+                                <div id="adminMaterialsList">
+                                    <p class="text-secondary text-center py-5">Select a course to index materials.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals (Styled in CSS) -->
+    <div class="modal fade" id="editCourseModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Course</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="editCourseForm" onsubmit="updateCourse(event)">
+                    <div class="modal-body">
+                        <input type="hidden" id="editCourseId">
+                        <div class="form-group">
+                            <label class="form-label">Course Title</label>
+                            <input type="text" id="editCourseTitle" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <textarea id="editCourseDescription" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Schedule</label>
+                            <input type="text" id="editCourseSchedule" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Capacity</label>
+                            <input type="number" id="editCourseCapacity" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-outline-neon" data-bs-dismiss="modal">Abort</button>
+                        <button type="submit" class="btn-primary-neon">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="courseStudentsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="courseStudentsModalTitle">Registered Students</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="courseStudentsListContainer">
+                        <p class="text-center text-secondary">Syncing...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="slipModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Payment Slip</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="slipImage" src="" alt="Payment Slip" class="img-fluid rounded"
+                        style="display:none; border: 1px solid var(--border-color);">
+                    <iframe id="slipPdf" src="" width="100%" height="500px"
+                        style="display:none; border-radius: 12px;"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        function switchTab(sectionId, element) {
+            // Update UI
+            document.querySelectorAll('.dashboard-section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            element.classList.add('active');
+        }
+    </script>
+</body>
+
+</html>
