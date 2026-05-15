@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - WD33 Course Registration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css?v=2">
+</head>
+
+<body>
+    <!-- Notification Bar -->
+    <div id="notification" class="notification-bar" role="alert"></div>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="student.html" class="sidebar-logo">
+                <i class="bi bi-mortarboard-fill"></i>
+                <span>WD33 REG</span>
+            </a>
+
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="#" id="nav-browse" class="nav-link active" onclick="switchTab('student-browse', this)">
+                        <i class="bi bi-search"></i>
+                        <span>Browse Courses</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" id="nav-enrollments" class="nav-link" onclick="switchTab('student-enrollments', this)">
+                        <i class="bi bi-journal-check"></i>
+                        <span>My Enrollments</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" id="nav-pending" class="nav-link" onclick="switchTab('student-pending', this)">
+                        <i class="bi bi-hourglass-split"></i>
+                        <span>Pending Requests</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" id="nav-profile" class="nav-link" onclick="switchTab('student-profile', this)">
+                        <i class="bi bi-person-badge"></i>
+                        <span>Profile & Security</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" id="nav-support" class="nav-link" onclick="switchTab('student-support', this)">
+                        <i class="bi bi-headset"></i>
+                        <span>Support Center</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#" class="nav-link text-danger" onclick="logout()">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header>
+                <div class="welcome-text">
+                    <h1>Welcome, <span id="studentWelcomeName" class="text-cyan">Student</span></h1>
+                    <p>Upgrade your skills with our advanced curriculum.</p>
+                </div>
+                <div class="header-actions">
+                    <div id="userInfo" class="user-profile text-secondary"></div>
+                    <button class="btn-outline-neon" onclick="logout()">
+                        <i class="bi bi-power"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- KPI Cards -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="glass-card kpi-card clickable-card"
+                        onclick="document.getElementById('nav-browse').click()">
+                        <div class="kpi-data">
+                            <h3 id="statTotalCourses">0</h3>
+                            <p>Available Courses</p>
+                        </div>
+                        <div class="kpi-chart">
+                            <svg class="mini-chart" viewBox="0 0 100 40" style="color: var(--accent-purple);">
+                                <path d="M0,35 Q20,5 40,25 T80,10 T100,30" stroke="currentColor"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card kpi-card clickable-card"
+                        onclick="document.getElementById('nav-enrollments').click()">
+                        <div class="kpi-data">
+                            <h3 id="statMyEnrollments">0</h3>
+                            <p>Active Enrollments</p>
+                        </div>
+                        <div class="kpi-chart">
+                            <svg class="mini-chart" viewBox="0 0 100 40" style="color: var(--accent-cyan);">
+                                <path d="M0,30 Q15,35 30,15 T60,25 T100,5" stroke="currentColor"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card kpi-card clickable-card"
+                        onclick="document.getElementById('nav-pending').click()">
+                        <div class="kpi-data">
+                            <h3 id="statPending">0</h3>
+                            <p>Pending</p>
+                        </div>
+                        <div class="kpi-chart">
+                            <svg class="mini-chart" viewBox="0 0 100 40" style="color: var(--accent-pink);">
+                                <path d="M0,35 Q25,25 50,35 T100,10" stroke="currentColor"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div id="student-content">
+                <!-- Browse Courses Section -->
+                <div id="student-browse" class="dashboard-section">
+                    <div class="row mb-5">
+                        <div class="col-md-8">
+                            <div class="form-group mb-0" style="display: flex; gap: 15px;">
+                                <input type="text" id="courseSearchInput" class="form-control"
+                                    placeholder="Search by course name..." style="flex: 1;">
+                                <button class="btn-primary-neon" onclick="searchCourses()">
+                                    <i class="bi bi-search"></i>
+                                    <span>Search</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="coursesList" class="row g-4">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+
+                <!-- My Enrollments Section (Approved/Rejected) -->
+                <div id="student-enrollments" class="dashboard-section hidden">
+                    <div class="table-container">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Course</th>
+                                    <th>Verification Status</th>
+                                    <th>Payment Slip</th>
+                                    <th>Materials</th>
+                                    <th>Timestamp</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="enrollmentsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pending Requests Section -->
+                <div id="student-pending" class="dashboard-section hidden">
+                    <div class="table-container">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Course</th>
+                                    <th>Verification Status</th>
+                                    <th>Payment Slip</th>
+                                    <th>Timestamp</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pendingTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Profile Section -->
+                <div id="student-profile" class="dashboard-section hidden">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="glass-card">
+                                <h5 class="mb-4"><i class="bi bi-person-gear me-2"></i>Student Profile</h5>
+                                <form id="profileForm" onsubmit="updateProfile(event)">
+                                    <div class="form-group">
+                                        <label class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" id="profileName" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" id="profileEmail" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Student ID</label>
+                                        <input type="text" class="form-control" id="profileStudentId" disabled>
+                                    </div>
+                                    <button type="submit" class="btn-primary-neon w-100">Update Profile</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="glass-card h-100">
+                                <h5 class="mb-4"><i class="bi bi-shield-lock me-2"></i>Security</h5>
+                                <form id="passwordForm" onsubmit="changePassword(event)">
+                                    <div class="form-group">
+                                        <label class="form-label">Current Password</label>
+                                        <input type="password" class="form-control" id="currentPassword" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">New Password</label>
+                                        <input type="password" class="form-control" id="newPassword" required
+                                            minlength="6">
+                                    </div>
+                                    <button type="submit" class="btn-primary-neon w-100">Change Password</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Support Section -->
+                <div id="student-support" class="dashboard-section hidden">
+                    <div class="row g-4 justify-content-center">
+                        <div class="col-md-6">
+                            <div class="glass-card text-center py-5 h-100">
+                                <i class="bi bi-headset text-cyan display-3 mb-4"></i>
+                                <h2 class="text-white mb-4">SUPPORT CENTER</h2>
+                                <p class="text-secondary mb-5">Need assistance? Our support team is here to help.</p>
+                                
+                                <div class="d-flex flex-column gap-3">
+                                    <div class="glass-card d-flex align-items-center justify-content-between p-3" style="background: rgba(0, 242, 255, 0.05); border-color: rgba(0, 242, 255, 0.2);">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-envelope-at text-cyan fs-4 me-3"></i>
+                                            <div class="text-start">
+                                                <div class="small text-secondary">Email Support</div>
+                                                <div class="text-white fw-bold">support.wd33@gmail.com</div>
+                                            </div>
+                                        </div>
+                                        <a href="mailto:support.wd33@gmail.com" class="btn btn-sm btn-outline-neon">Email</a>
+                                    </div>
+
+                                    <div class="glass-card d-flex align-items-center justify-content-between p-3" style="background: rgba(255, 193, 7, 0.05); border-color: rgba(255, 193, 7, 0.2);">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-telephone text-warning fs-4 me-3"></i>
+                                            <div class="text-start">
+                                                <div class="small text-secondary">Phone Support</div>
+                                                <div class="text-warning fw-bold">+94 777777777</div>
+                                            </div>
+                                        </div>
+                                        <a href="tel:+94777777777" class="btn btn-sm btn-outline-neon" style="--accent-neon: #ffc107;">Call</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal fade" id="enrollModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Enroll in Course</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="enrollForm" onsubmit="submitEnrollment(event)">
+                    <div class="modal-body">
+                        <input type="hidden" id="enrollCourseId">
+                        <div class="form-group">
+                            <label class="form-label">Course Name</label>
+                            <input type="text" id="enrollCourseTitle" class="form-control" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Payment Slip (Image/PDF)</label>
+                            <input type="file" id="enrollPaymentSlip" class="form-control" accept="image/*,.pdf"
+                                required>
+                            <p class="text-secondary small mt-2">Upload your payment slip for verification.</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-outline-neon" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn-primary-neon">Submit Request</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="materialsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="materialsModalTitle">Course Materials</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="materialsListContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="slipModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Payment Slip</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="slipImage" src="" alt="Payment Slip" class="img-fluid rounded"
+                        style="display:none; border: 1px solid var(--border-color);">
+                    <iframe id="slipPdf" src="" width="100%" height="500px"
+                        style="display:none; border-radius: 12px;"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/student.js"></script>
+    <script>
+        function switchTab(sectionId, element) {
+            document.querySelectorAll('.dashboard-section').forEach(s => s.classList.add('hidden'));
+            const target = document.getElementById(sectionId);
+            if(target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            element.classList.add('active');
+        }
+    </script>
+</body>
+
+</html>
