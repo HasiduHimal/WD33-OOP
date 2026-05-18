@@ -9,7 +9,7 @@ public class Material {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long courseId; // Simple foreign key - no @JoinColumn
+    private Long courseId; // Simple foreign key 
     private String title;
     private String filePath;
 
